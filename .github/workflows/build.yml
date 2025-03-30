@@ -4,6 +4,7 @@ on:
 
 jobs:
   release:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +43,17 @@ jobs:
             echo "下载失败，请检查网络连接或下载链接。"
             exit 1
           fi
-      - name: Build Image
+
+      - name: Prepare Dockerfile
         run: |
-          docker build -t bfg --build-arg BFG_VERSION=$BFG_VERSION .
+          mv bfg*.jar bfg.jar
+
+      - name: Build & Push Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: bfg
+          tags: ${{ env.BFG_VERSION }},latest
+          buildArgs: BFG_VERSION=${{ env.BFG_VERSION }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
