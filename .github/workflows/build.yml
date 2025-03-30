@@ -1,0 +1,48 @@
+name: Auto Release
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download bfg.jar
+        run: |
+          # 获取网页内容
+          page_content=$(curl -s https://rtyley.github.io/bfg-repo-cleaner/)
+
+          # 提取下载链接
+          download_url=$(echo "$page_content" | grep -oP '<a[^>]+id="download"[^>]+href="https://repo1\.maven\.org/maven2/com/madgag/bfg/[^"]+\.jar"[^>]*>' | grep -oP 'https://repo1\.maven\.org/maven2/com/madgag/bfg/[^"]+\.jar')
+
+          # 检查是否成功提取链接
+          if [ -z "$download_url" ]; then
+            echo "未能提取下载链接，请检查网页结构是否发生变化。"
+            exit 1
+          fi
+
+          # 提取版本号
+          bfg_version=$(echo "$download_url" | grep -oP '(?<=bfg/)[^/]+(?=/bfg-)')
+          echo "提取到的 BFG 版本号：$bfg_version"
+
+          # 设置环境变量
+          echo "BFG_VERSION=$bfg_version" >> $GITHUB_ENV
+
+          # 下载文件
+          echo "正在下载 BFG jar 文件：$download_url"
+          wget $download_url -O $(basename $download_url)
+
+          ls
+          ls -al
+
+          # 检测下载是否成功
+          if [ $? -eq 0 ]; then
+            echo "下载完成：$(basename "$download_url")"
+          else
+            echo "下载失败，请检查网络连接或下载链接。"
+            exit 1
+          fi
+      - name: Build Image
+        run: |
+          docker build -t bfg .
+          # docker build -t bfg --build-arg BFG_VERSION=$BFG_VERSION .
