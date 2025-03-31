@@ -55,20 +55,6 @@ replace.txt
 mysecretpassword==>nothinghappenhere
 ```
 
-### If you want to handle with all commit(including latest commit), please add `--no-blob-protection` params
-
-```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" zhiyushang/bfg4docker:latest --strip-blobs-bigger-than 100M --no-blob-protection
-```
-
-```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" zhiyushang/bfg4docker:latest --delete-files id_rsa --no-blob-protection
-```
-
-```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" -v "/path/to/replace.txt:/passwords.txt" zhiyushang/bfg4docker:latest --replace-text /passwords.txt --no-blob-protection
-```
-
 ### Help
 
 ```bash
