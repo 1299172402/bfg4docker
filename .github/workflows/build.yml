@@ -44,6 +44,19 @@ jobs:
             exit 1
           fi
 
+      - name: Check if Docker Image Exists
+        run: |
+          # 检查镜像是否存在
+          IMAGE_URL="ghcr.io/${{ github.repository_owner }}/bfg:${{ env.BFG_VERSION }}"
+          echo "检查镜像是否存在: $IMAGE_URL"
+          if docker manifest inspect "$IMAGE_URL" > /dev/null 2>&1; then
+            echo "镜像已存在: $IMAGE_URL"
+            echo "取消工作流，因为镜像已存在。"
+            exit 0
+          else
+            echo "镜像不存在: $IMAGE_URL"
+          fi
+
       - name: Prepare Dockerfile
         run: |
           mv bfg*.jar bfg.jar
