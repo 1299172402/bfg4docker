@@ -1,4 +1,4 @@
-# BFG for Docker
+# BFG4Docker
 
 [![Auto Release](https://github.com/1299172402/bfg4docker/actions/workflows/build.yml/badge.svg)](https://github.com/1299172402/bfg4docker/actions/workflows/build.yml)
 
@@ -9,6 +9,8 @@ alternative to `git-filter-branch` for cleansing bad data out of your Git reposi
 
 * Removing **Crazy Big Files**
 * Removing **Passwords, Credentials** & other **Private data**
+
+BFG for Docker is here : **https://github.com/1299172402/bfg4docker**
 
 Main documentation for The BFG is here : **https://rtyley.github.io/bfg-repo-cleaner/**
 
@@ -25,7 +27,7 @@ git clone https://github.com/username/dirty-repo.git
 Run bfg command.
 
 ```bash
-docker run --rm -v "<your repo folder>:/repo" ghcr.io/1299172402/bfg:latest <command>
+docker run --rm -v "<your repo folder>:/repo" zhiyushang/bfg4docker:latest <command>
 ```
 
 ## Example
@@ -33,19 +35,19 @@ docker run --rm -v "<your repo folder>:/repo" ghcr.io/1299172402/bfg:latest <com
 ### Remove more than 100M file in the git history
 
 ```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" ghcr.io/1299172402/bfg:latest --strip-blobs-bigger-than 100M
+docker run --rm -v "/path/to/dirty-repo:/repo" zhiyushang/bfg4docker:latest --strip-blobs-bigger-than 100M
 ```
 
 ### Delete all files named 'id_rsa' in the git history
 
 ```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" ghcr.io/1299172402/bfg:latest --delete-files id_rsa
+docker run --rm -v "/path/to/dirty-repo:/repo" zhiyushang/bfg4docker:latest --delete-files id_rsa
 ```
 
 ### Replace all passwords 'mysecretpassword' to 'nothinghappenhere' in the git history
 
 ```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" -v "/path/to/replace.txt:/passwords.txt" ghcr.io/1299172402/bfg:latest --replace-text /passwords.txt
+docker run --rm -v "/path/to/dirty-repo:/repo" -v "/path/to/replace.txt:/passwords.txt" zhiyushang/bfg4docker:latest --replace-text /passwords.txt
 ```
 
 replace.txt
@@ -56,19 +58,19 @@ mysecretpassword==>nothinghappenhere
 ### If you want to handle with all commit(including latest commit), please add `--no-blob-protection` params
 
 ```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" ghcr.io/1299172402/bfg:latest --strip-blobs-bigger-than 100M --no-blob-protection
+docker run --rm -v "/path/to/dirty-repo:/repo" zhiyushang/bfg4docker:latest --strip-blobs-bigger-than 100M --no-blob-protection
 ```
 
 ```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" ghcr.io/1299172402/bfg:latest --delete-files id_rsa --no-blob-protection
+docker run --rm -v "/path/to/dirty-repo:/repo" zhiyushang/bfg4docker:latest --delete-files id_rsa --no-blob-protection
 ```
 
 ```bash
-docker run --rm -v "/path/to/dirty-repo:/repo" -v "/path/to/replace.txt:/passwords.txt" ghcr.io/1299172402/bfg:latest --replace-text /passwords.txt --no-blob-protection
+docker run --rm -v "/path/to/dirty-repo:/repo" -v "/path/to/replace.txt:/passwords.txt" zhiyushang/bfg4docker:latest --replace-text /passwords.txt --no-blob-protection
 ```
 
 ### Help
 
 ```bash
-docker run --rm ghcr.io/1299172402/bfg:latest --help
+docker run --rm zhiyushang/bfg4docker:latest --help
 ```

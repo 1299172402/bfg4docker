@@ -34,7 +34,7 @@ jobs:
 
       - name: Check if Docker Image Exists
         run: |
-          IMAGE_URL="ghcr.io/${{ github.repository_owner }}/bfg:${{ env.BFG_VERSION }}"
+          IMAGE_URL="ghcr.io/${{ github.repository_owner }}/bfg4docker:${{ env.BFG_VERSION }}"
           echo "检查镜像是否存在: $IMAGE_URL"
           if docker manifest inspect "$IMAGE_URL" > /dev/null 2>&1; then
             echo "EXISTS=true" >> $GITHUB_ENV
@@ -71,7 +71,7 @@ jobs:
         if: env.EXISTS != 'true'
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: bfg
+          image: bfg4docker
           tags: ${{ env.BFG_VERSION }},latest
           buildArgs: BFG_VERSION=${{ env.BFG_VERSION }}
           registry: ghcr.io
@@ -82,7 +82,7 @@ jobs:
         if: env.EXISTS != 'true'
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: zhiyushang/bfg
+          image: zhiyushang/bfg4docker
           tags: ${{ env.BFG_VERSION }},latest
           buildArgs: BFG_VERSION=${{ env.BFG_VERSION }}
           registry: docker.io
