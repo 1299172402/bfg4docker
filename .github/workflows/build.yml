@@ -67,7 +67,7 @@ jobs:
         run: |
           mv bfg*.jar bfg.jar
 
-      - name: Build & Push Docker Image
+      - name: Build & Push Docker Image (ghcr.io)
         if: env.EXISTS != 'true'
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
@@ -77,3 +77,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & Push Docker Image (docker.io)
+        if: env.EXISTS != 'true'
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: zhiyushang/bfg
+          tags: ${{ env.BFG_VERSION }},latest
+          buildArgs: BFG_VERSION=${{ env.BFG_VERSION }}
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
